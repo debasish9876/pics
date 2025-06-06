@@ -3,156 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sequential Image Generation</title>
+    <title>Student Image Portal</title>
     <style>
-        img {
-            width: 50%;
-            margin-bottom: 10px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        form {
-            margin-top: 20px;
-            font-size: 16px;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
         }
-        #result {
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: blue;
-        }
-        .batch-heading {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        .image-container {
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
             text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .search-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-section h2 {
+            color: #333;
             margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            min-width: 250px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .batch-section {
+            margin-top: 40px;
+        }
+
+        .batch-section h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .batch-group {
+            margin-bottom: 30px;
+        }
+
+        .batch-title {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .batch-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .batch-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .batch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #fcb69f 0%, #ffecd2 100%);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .result-image {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            display: block;
+        }
+
+        .images-container {
+            margin-top: 30px;
+        }
+
+        .batch-images-title {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-card p {
+            margin-top: 10px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .batch-buttons {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Student Image Portal</h1>
+            <p>Quick access to student photos by roll number or batch</p>
+        </div>
 
-    <!-- Container to hold the images -->
-    <div id="images-container"></div>
+        <div class="main-content">
+            <!-- Priority Search Section -->
+            <div class="search-section">
+                <h2>🔍 Find Student by Roll Number</h2>
+                <form class="search-form" onsubmit="getImageUrl(event)">
+                    <input 
+                        type="text" 
+                        id="rollNumber" 
+                        class="search-input"
+                        placeholder="Enter Roll Number (e.g., 22CSE001)" 
+                        required
+                    >
+                    <button type="submit" class="search-btn">Search Student</button>
+                </form>
+            </div>
 
-    <!-- Buttons for different batches -->
-    <div class="batch-heading">22 Batch</div>
-    <button onclick="generateImages('22CSE')">22CSE Batch</button>
-    <button onclick="generateImages('22BAG')">22AG Batch</button>
-    <button onclick="generateImages('22ECE')">22ECE Batch</button>
-    <button onclick="generateImages('22ME')">22ME Batch</button>
-    <button onclick="generateImages('22EEE')">22EEE Batch</button>
-    <button onclick="generateImages('22EE')">22EE Batch</button>
-    <button onclick="generateImages('22BT')">22BT Batch</button>
-    <button onclick="generateImages('22MCA')">22MCA Batch</button>
-    <button onclick="generateImages('22BCA')">22BCA Batch</button>
-    <button onclick="generateImages('22BBA')">22BBA Batch</button>
-    <button onclick="generateImages('22MBA')">22MBA Batch</button>
-    <button onclick="generateImages('22Cv')">22CIVIL Batch</button>
+            <!-- Result Section -->
+            <div id="result" class="result-section"></div>
 
-    <div class="batch-heading">23 Batch</div>
-    <button onclick="generateImages('23CSE')">23CSE Batch</button>
-    <button onclick="generateImages('23BAG')">23AG Batch</button>
-    <button onclick="generateImages('23ECE')">23ECE Batch</button>
-    <button onclick="generateImages('23ME')">23ME Batch</button>
-    <button onclick="generateImages('23EEE')">23EEE Batch</button>
-    <button onclick="generateImages('23EE')">23EE Batch</button>
-    <button onclick="generateImages('23BT')">23BT Batch</button>
-    <button onclick="generateImages('23MCA')">23MCA Batch</button>
-    <button onclick="generateImages('23BCA')">23BCA Batch</button>
-    <button onclick="generateImages('23BBA')">23BBA Batch</button>
-    <button onclick="generateImages('23MBA')">23MBA Batch</button>
-    <button onclick="generateImages('23Cv')">23CIVIL Batch</button>
+            <!-- Images Container -->
+            <div id="images-container" class="images-container"></div>
 
-    <div class="batch-heading">24 Batch</div>
-    <button onclick="generateImages('24CSE')">24CSE Batch</button>
-    <button onclick="generateImages('24BAG')">24AG Batch</button>
-    <button onclick="generateImages('24ECE')">24ECE Batch</button>
-    <button onclick="generateImages('24ME')">24ME Batch</button>
-    <button onclick="generateImages('24EEE')">24EEE Batch</button>
-    <button onclick="generateImages('24EE')">24EE Batch</button>
-    <button onclick="generateImages('24BT')">24BT Batch</button>
-    <button onclick="generateImages('24MCA')">24MCA Batch</button>
-    <button onclick="generateImages('24BCA')">24BCA Batch</button>
-    <button onclick="generateImages('24BBA')">24BBA Batch</button>
-    <button onclick="generateImages('24MBA')">24MBA Batch</button>
-    <button onclick="generateImages('24Cv')">24CIVIL Batch</button>
+            <!-- Batch Selection Section -->
+            <div class="batch-section">
+                <h2>📚 Browse by Batch</h2>
+                
+                <div class="batch-group">
+                    <div class="batch-title">2022 Batch</div>
+                    <div class="batch-buttons">
+                        <button class="batch-btn" onclick="generateImages('22CSE')">CSE</button>
+                        <button class="batch-btn" onclick="generateImages('22BAG')">Agriculture</button>
+                        <button class="batch-btn" onclick="generateImages('22ECE')">ECE</button>
+                        <button class="batch-btn" onclick="generateImages('22ME')">Mechanical</button>
+                        <button class="batch-btn" onclick="generateImages('22EEE')">EEE</button>
+                        <button class="batch-btn" onclick="generateImages('22EE')">EE</button>
+                        <button class="batch-btn" onclick="generateImages('22BT')">Biotech</button>
+                        <button class="batch-btn" onclick="generateImages('22MCA')">MCA</button>
+                        <button class="batch-btn" onclick="generateImages('22BCA')">BCA</button>
+                        <button class="batch-btn" onclick="generateImages('22BBA')">BBA</button>
+                        <button class="batch-btn" onclick="generateImages('22MBA')">MBA</button>
+                        <button class="batch-btn" onclick="generateImages('22Cv')">Civil</button>
+                    </div>
+                </div>
 
-    <!-- Form to enter roll number and get the URL -->
-    <form onsubmit="getImageUrl(event)">
-        <label for="rollNumber">Enter Roll Number:</label>
-        <input type="text" id="rollNumber" placeholder="e.g., 22CSE001" required>
-        <button type="submit">Get Image</button>
-    </form>
+                <div class="batch-group">
+                    <div class="batch-title">2023 Batch</div>
+                    <div class="batch-buttons">
+                        <button class="batch-btn" onclick="generateImages('23CSE')">CSE</button>
+                        <button class="batch-btn" onclick="generateImages('23BAG')">Agriculture</button>
+                        <button class="batch-btn" onclick="generateImages('23ECE')">ECE</button>
+                        <button class="batch-btn" onclick="generateImages('23ME')">Mechanical</button>
+                        <button class="batch-btn" onclick="generateImages('23EEE')">EEE</button>
+                        <button class="batch-btn" onclick="generateImages('23EE')">EE</button>
+                        <button class="batch-btn" onclick="generateImages('23BT')">Biotech</button>
+                        <button class="batch-btn" onclick="generateImages('23MCA')">MCA</button>
+                        <button class="batch-btn" onclick="generateImages('23BCA')">BCA</button>
+                        <button class="batch-btn" onclick="generateImages('23BBA')">BBA</button>
+                        <button class="batch-btn" onclick="generateImages('23MBA')">MBA</button>
+                        <button class="batch-btn" onclick="generateImages('23Cv')">Civil</button>
+                    </div>
+                </div>
 
-    <!-- Container to display the generated URL or image -->
-    <div id="result"></div>
+                <div class="batch-group">
+                    <div class="batch-title">2024 Batch</div>
+                    <div class="batch-buttons">
+                        <button class="batch-btn" onclick="generateImages('24CSE')">CSE</button>
+                        <button class="batch-btn" onclick="generateImages('24BAG')">Agriculture</button>
+                        <button class="batch-btn" onclick="generateImages('24ECE')">ECE</button>
+                        <button class="batch-btn" onclick="generateImages('24ME')">Mechanical</button>
+                        <button class="batch-btn" onclick="generateImages('24EEE')">EEE</button>
+                        <button class="batch-btn" onclick="generateImages('24EE')">EE</button>
+                        <button class="batch-btn" onclick="generateImages('24BT')">Biotech</button>
+                        <button class="batch-btn" onclick="generateImages('24MCA')">MCA</button>
+                        <button class="batch-btn" onclick="generateImages('24BCA')">BCA</button>
+                        <button class="batch-btn" onclick="generateImages('24BBA')">BBA</button>
+                        <button class="batch-btn" onclick="generateImages('24MBA')">MBA</button>
+                        <button class="batch-btn" onclick="generateImages('24Cv')">Civil</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- JavaScript for dynamic image generation and URL generation -->
     <script>
         // Function to generate images dynamically
         function generateImages(batchPrefix) {
             const container = document.getElementById('images-container');
-            container.innerHTML = `<div class='batch-heading'>Images for ${batchPrefix} Batch</div>`; // Show the selected batch name
+            container.innerHTML = `<div class='batch-images-title'>📸 Images for ${batchPrefix} Batch</div>`;
 
             const baseUrl = "https://gietuerp.in/StudentDocuments/";
-            const imgSuffix = ".JPG"; // Image file extension
+            const imgSuffix = ".JPG";
 
-            const startNumber = 1; // Starting number for images
-            const totalImages = 1200; // Set the total number of images to generate
+            const startNumber = 1;
+            const totalImages = 1200;
 
-            // Loop to generate images from startNumber to startNumber + totalImages
+            const gridContainer = document.createElement('div');
+            gridContainer.className = 'image-grid';
+
             for (let i = startNumber; i < startNumber + totalImages; i++) {
-                // Format the serial number to have leading zeros (e.g., 015, 016, etc.)
                 const serialNumber = String(i).padStart(3, '0');
-
-                // Construct the image URL
                 const imgUrl = `${baseUrl}${batchPrefix}${serialNumber}/${batchPrefix}${serialNumber}${imgSuffix}`;
 
-                // Create image element
+                const imageCard = document.createElement('div');
+                imageCard.className = 'image-card';
+
                 const img = document.createElement('img');
                 img.src = imgUrl;
-                img.alt = `Image ${serialNumber}`;
+                img.alt = `Student ${serialNumber}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    imageCard.style.display = 'none';
+                };
 
-                // Create a container for the image and roll number
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('image-container'); // Add class for styling
-
-                // Append image to the container
-                imageContainer.appendChild(img);
-
-                // Create a paragraph to display the roll number under the image
                 const rollNumberText = document.createElement('p');
                 rollNumberText.textContent = `${batchPrefix}${serialNumber}`;
-                imageContainer.appendChild(rollNumberText);
 
-                // Append the container to the main container
-                container.appendChild(imageContainer);
+                imageCard.appendChild(img);
+                imageCard.appendChild(rollNumberText);
+                gridContainer.appendChild(imageCard);
             }
+
+            container.appendChild(gridContainer);
         }
 
         // Function to get the image URL based on the roll number
         function getImageUrl(event) {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault();
 
-            const rollNumberInput = document.getElementById('rollNumber').value;
+            const rollNumberInput = document.getElementById('rollNumber').value.trim();
+            if (!rollNumberInput) return;
+
             const baseUrl = "https://gietuerp.in/StudentDocuments/";
-            const imgSuffix = ".JPG"; // Image file extension
+            const imgSuffix = ".JPG";
 
-            // Construct the image URL
             const imgUrl = `${baseUrl}${rollNumberInput}/${rollNumberInput}${imgSuffix}`;
 
-            // Display the image in the result container
             const resultContainer = document.getElementById('result');
-            resultContainer.innerHTML = `<img src="${imgUrl}" alt="Image for ${rollNumberInput}" />`;
+            resultContainer.innerHTML = `
+                <h3 style="color: #333; margin-bottom: 15px;">Student: ${rollNumberInput}</h3>
+                <img src="${imgUrl}" alt="Student ${rollNumberInput}" class="result-image" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                <div style="display: none; color: #e74c3c; font-weight: 600;">
+                    ❌ Image not found for roll number: ${rollNumberInput}
+                </div>
+            `;
 
-            // Optionally, send the URL to the server
+            // Clear any previous batch images
+            document.getElementById('images-container').innerHTML = '';
+
+            // Send URL to server
             sendUrlToServer(imgUrl);
         }
 
@@ -174,6 +423,5 @@
             });
         }
     </script>
-
 </body>
 </html>
